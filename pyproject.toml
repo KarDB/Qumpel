@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = 'pylab_manager'
+version = '0.1.0'
+description = 'Initialize new measurement repos'
+license = {text = 'No license of for commercial or non-commercial use is granted'}
+dependencies = ['pyyaml']
+#author = 'Karl Briegel'
+#author_email = 'karl.briegel@tum.de'
+
+[tool.setuptools.packages]
+find = {}
+
+[project.scripts]
+manager = "manager:entry"
+
+[tool.mypy]
+check_untyped_defs = true
+ignore_missing_imports = true
