@@ -140,11 +140,13 @@ def _move_files(files, sweep=False):
         move(file, data_path / file)
 
 
-def _write_lab_log_if_configured(config, imagefiles, files):
+def _write_lab_log_if_configured(config, imagefiles, files, sweep=False):
     if config['keep_lab_log']:
         data_message = input('Please enter a comment about this measurement: ')
         date = datetime.today().strftime('%Y-%m-%d')
         measurement_type = files[0].split('_')[0]
+        if sweep:
+            measurement_type = files[0].rstrip('.npy')
         with open(Path('data') / f'log_{date}.md', 'a',
                   encoding='utf-8') as file:
             file.write(
@@ -152,6 +154,8 @@ def _write_lab_log_if_configured(config, imagefiles, files):
             # file.write(data_message + '\n')
             for image in imagefiles:
                 file.write(f'![]({measurement_type}/{image})\n')
+            file.write(
+                f'[config]({measurement_type}/{files[0].replace(config["file_type"], ".yaml")})\n')
             file.write(data_message + '\n')
 
 
@@ -177,4 +181,5 @@ def move_sweep():
     _move_files(files_to_move, sweep=True)
     image_files = move_images(
         image_files, files_to_move[0], config, sweep=True)
-    _write_lab_log_if_configured(config, image_files, files_to_move)
+    _write_lab_log_if_configured(
+        config, image_files, files_to_move, sweep=True)
