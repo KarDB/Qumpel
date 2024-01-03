@@ -11,13 +11,13 @@ def get_manager_config():
     try:
         with open('manager_config.yml', 'r', encoding='utf-8') as file:
             config = yaml.safe_load(file)
-    except Exception:
+    except FileNotFoundError as exeception:
         print('\nCould not fined manager config.'
               '\nPlase make sure that:'
               '\n\n1) You are in the root of your measurement folder'
               '\n2) The manager_config.yml file exists '
               '(e.g. by running "manager new")')
-        raise FileNotFoundError
+        raise FileNotFoundError from exeception
     return config
 
 
@@ -120,7 +120,7 @@ def _add_analysis_file(files):
 
 def _get_data_path(files, sweep=False):
     if sweep:
-        measurement_type = files[0].split('.')[0]
+        measurement_type = files[0].rstrip('.npy')
         data_path = Path('data') / measurement_type
         return data_path
     measurement_type = files[0].split('_')[0]
